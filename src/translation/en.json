@@ -1,0 +1,37 @@
+{
+  "common": {
+    "helloWorld": "Hello world"
+  },
+  "login_page": {
+    "employee_id": "Employee ID",
+    "employee_name": "Employee name",
+    "password": "Password",
+    "save_password": "Save password",
+    "sign_in": "Sign in",
+    "sign_out": "Sign out",
+    "forgot_password": "Forgot password",
+    "server_config": "Server",
+    "server_ip": "Server ip"
+  },
+  "server_page": {
+    "connect_success": "Connection success",
+    "connect_fail": "Connection failed",
+    "ip_format_alert": "Please enter server ip address in right format",
+    "ip_enter_alert": "Please enter server ip address"
+  },
+  "route_button": {
+    "manufacture": "Sản xuất",
+    "manufacture_input": "SẢN XUẤT - ĐẦU VÀO",
+    "manufacture_output": "SẢN XUẤT - ĐẦU RA",
+    "quality": "Chất lượng",
+    "oqc": "OQC",
+    "introspect": "PQC - NỘI QUAN",
+    "external_inspection": "PQC - NGOẠI QUAN",
+    "parameter": "PQC - THÔNG SỐ",
+    "device": "Thiết bị",
+    "transport": "Vận chuyển"
+  },
+  "alert": {
+    "data_valid": "Please fill in all fields"
+  }
+}
