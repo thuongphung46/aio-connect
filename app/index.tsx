@@ -1,5 +1,11 @@
 import { Text } from "react-native";
+// import { HomeTemplate } from "~/src/components/templates/login";
 
 export default function Page() {
-  return <Text>Home page</Text>;
+  return (
+    <>
+      {/* <HomeTemplate></HomeTemplate> */}
+      <Text>test</Text>
+    </>
+  );
 }
