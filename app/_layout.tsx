@@ -1,11 +1,12 @@
-import type { ReactNode } from "react";
-import { DoobooProvider } from "dooboo-ui";
-import { Slot } from "expo-router";
+import { Provider } from "react-redux";
+import { store } from "~/src/redux/store";
+import "~/src/translation/i18n";
+import { App } from "./app";
 
-export default function RootLayout(): ReactNode {
+export default function Layout() {
   return (
-    <DoobooProvider>
-      <Slot />
-    </DoobooProvider>
+    <Provider store={store}>
+      <App></App>
+    </Provider>
   );
 }

@@ -1,8 +1,5 @@
 import { ExpoConfig, ConfigContext } from "expo/config";
 
-// In SDK 46 and lower, use the following import instead:
-// import { ExpoConfig } from '@expo/config-types';
-
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "AIO Connect",
