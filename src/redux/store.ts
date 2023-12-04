@@ -15,9 +15,9 @@ const middleware = [sagaMiddleware];
 export const store = configureStore({
   reducer: {
     // reducers go here
-    // AppAlertReducer,
+    AppAlertReducer,
     CouterReducer,
-    // // LoginReducer,
+    LoginReducer,
     // AppLoadingReducer,
     // CommonReducer,
     // MqttReducer,

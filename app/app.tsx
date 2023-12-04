@@ -53,15 +53,14 @@ export const App = () => {
 
   return (
     <>
-      <SafeAreaView
+      {/* <SafeAreaView
         edges={["top", "left", "right"]}
-        style={{ flex: 1, backgroundColor: Colors.main }}
-      >
+        style={{ flex: 1, backgroundColor: Colors.main }}>
         <KeyboardAwareScrollView contentContainerStyle={{ minHeight: "100%" }}>
           <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }}>
             <StatusBar style="light" backgroundColor={Colors.main} />
-            {/* <AppLoading></AppLoading>
-            <Header></Header> */}
+            <AppLoading></AppLoading>
+            <Header></Header>
             <View
               style={{
                 flex: 1,
@@ -77,19 +76,18 @@ export const App = () => {
                         : RNStatusBar?.currentHeight
                     }`
                   ) || 0),
-              }}
-            >
+              }}>
               <Slot></Slot>
             </View>
-            {/* {!isHome && <MenuBar data={MenuData}></MenuBar>}
-            <Footer></Footer> */}
+            {!isHome && <MenuBar data={MenuData}></MenuBar>}
+            <Footer></Footer>
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>
       <SafeAreaView
         style={{ flex: 0, backgroundColor: Colors.backgroundColor }}
-        edges={["bottom"]}
-      ></SafeAreaView>
+        edges={["bottom"]}></SafeAreaView> */}
+      <Slot></Slot>
     </>
   );
 };

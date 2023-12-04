@@ -4,6 +4,7 @@
     "name": "aio-connect",
     "slug": "aio-connect",
     "version": "1.0.0",
+    "privacy": "unlisted",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,21 +13,31 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "experiments": { "tsconfigPaths": true },
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.irs.svnmes"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/splash.png",
+        "backgroundColor": "#C62630"
+      },
+      "package": "com.irs.svnmes",
+      "versionCode": 11,
+      "compileSdkVersion": 33,
+      "targetSdkVersion": 33
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
+    },
+
+    "extra": {
+      "eas": {
+        "projectId": "fee6f798-1e8e-4246-a4ce-13d4f771cb03"
+      }
     }
   }
 }
