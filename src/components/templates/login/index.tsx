@@ -24,7 +24,7 @@ export const HomeTemplate = () => {
 
   const [userData, setUserData] = useState({
     // emp_id: "",
-    emp_name: "",
+    username: "",
     password: "",
   });
   // Effects
@@ -66,15 +66,15 @@ export const HomeTemplate = () => {
     let server_address: any = "";
     server_address = await PxStorage.get(LocalStore.serverAddress);
     if (!server_address) {
-      router.replace("/server_configuration");
+      router.replace("/");
     } else {
       ApiAddress.api = server_address;
     }
   };
 
-  useFocusEffect(() => {
-    getDataLocalStore();
-  });
+  // useFocusEffect(() => {
+  //   getDataLocalStore();
+  // });
 
   // Functions
   // const updateUserData = (field: string, value: any) => {
@@ -107,7 +107,7 @@ export const HomeTemplate = () => {
       Actions.requestLogin(userData, () => {
         setUserData({
           // emp_id: "",
-          emp_name: "",
+          username: "",
           password: "",
         });
       })
