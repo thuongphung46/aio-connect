@@ -23,7 +23,6 @@ export const HomeTemplate = () => {
   const [client, setClient] = useState<MqttClient>();
 
   const [userData, setUserData] = useState({
-    // emp_id: "",
     username: "",
     password: "",
   });
@@ -106,7 +105,6 @@ export const HomeTemplate = () => {
     dispatch(
       Actions.requestLogin(userData, () => {
         setUserData({
-          // emp_id: "",
           username: "",
           password: "",
         });
