@@ -1,7 +1,12 @@
 import { Slot, usePathname } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-import { View, StatusBar as RNStatusBar, Platform } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import {
+  View,
+  StatusBar as RNStatusBar,
+  Platform,
+  TextInput,
+} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   SafeAreaView,
@@ -23,26 +28,29 @@ import {
 import { useAppDispatch, useAppSelector } from "~/src/redux/hook";
 import { setState } from "~/src/redux/slices/common";
 
+// export type StreamChannel = ChannelPreviewMessengerProps['channel'] | undefined
+// export type StreamMessageId = string | undefined
+
+// type AppContextType = {
+//   messageInputRef: RefObject<TextInput> | null
+//   channel: StreamChannel
+//   setChannel: Dispatch<SetStateAction<StreamChannel>>
+//   selectedChannelsForEditing: StreamChannel[]
+//   setSelectedChannelsForEditing: Dispatch<SetStateAction<StreamChannel[]>>
+//   selectedMessageIdsEditing: StreamMessageId[]
+//   setSelectedMessageIdsEditing: Dispatch<SetStateAction<StreamMessageId[]>>
+// }
+
+// export const AppContext = React.createContext<AppContextType>(
+//   {} as AppContextType,
+// )
+// export const useAppContext = () => React.useContext(AppContext)
+
 export const App = () => {
   const dispatch = useAppDispatch();
   const pathName = usePathname();
   const isHome =
     pathName === "/" || pathName === "" || pathName === "/server_configuration";
-  // const { selectedRow } = useAppSelector((x) => x.ProductionOutputReducer);
-  // const navigateToQuanlity = () => {
-  //   if (!selectedRow) {
-  //     ShowAlert("ERROR", "Bạn chưa chọn Lệnh sản xuất");
-  //     return false;
-  //   }
-  // };
-
-  // const MenuData = [
-  //   { title: "Sản xuất", id: MainMenu.manufacture },
-  //   { title: "Chất lượng", id: MainMenu.quality, OnPress: navigateToQuanlity },
-  //   { title: "Thiết bị", id: MainMenu.device },
-  //   { title: "Vận chuyển", id: MainMenu.transpot },
-  // ];
-
   useEffect(() => {
     const check = Navigation.find((x) => {
       return x.path === pathName;
@@ -50,44 +58,50 @@ export const App = () => {
     dispatch(setState({ activeMenu: check }));
   }, [pathName]);
   const inset = useSafeAreaInsets();
+  const messageInputRef = useRef<TextInput>(null);
+  // const [channel, setChannel] = useState<StreamChannel>()
+  // const [clientReady, setClientReady] = useState<boolean>(false)
+  // const [selectedChannelsForEditing, setSelectedChannelsForEditing] = useState<
+  //   StreamChannel[]
+  // >([])
+  // const [selectedMessageIdsEditing, setSelectedMessageIdsEditing] = useState<
+  //   StreamMessageId[]
+  // >([])
+  // const {bottom} = useSafeAreaInsets()
+
+  // useEffect(() => {
+  //   const setupClient = async () => {
+  //     const connectPromise = chatClient.connectUser(user, userToken)
+  //     setClientReady(true)
+  //     await connectPromise
+  //   }
+
+  //   setupClient()
+  // }, [])
 
   return (
-    <>
-      {/* <SafeAreaView
-        edges={["top", "left", "right"]}
-        style={{ flex: 1, backgroundColor: Colors.main }}>
-        <KeyboardAwareScrollView contentContainerStyle={{ minHeight: "100%" }}>
-          <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }}>
-            <StatusBar style="light" backgroundColor={Colors.main} />
-            <AppLoading></AppLoading>
-            <Header></Header>
-            <View
-              style={{
-                flex: 1,
-                height:
-                  GlobalConstant.DeviceHeight -
-                  HeaderResponsive.height -
-                  (isHome ? 0 : MenuBarResponsive.height) -
-                  FooterResponsive.height -
-                  (parseFloat(
-                    `${
-                      Platform.OS === "ios"
-                        ? inset.top + inset.bottom
-                        : RNStatusBar?.currentHeight
-                    }`
-                  ) || 0),
-              }}>
-              <Slot></Slot>
-            </View>
-            {!isHome && <MenuBar data={MenuData}></MenuBar>}
-            <Footer></Footer>
-          </View>
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
-      <SafeAreaView
-        style={{ flex: 0, backgroundColor: Colors.backgroundColor }}
-        edges={["bottom"]}></SafeAreaView> */}
-      <Slot></Slot>
-    </>
+    // <NavigationContainer theme={{colors: {background: colors.dark.background}}}>
+    //   <AppContext.Provider
+    //     value={{
+    //       messageInputRef,
+    //       channel,
+    //       setChannel,
+    //       selectedChannelsForEditing,
+    //       setSelectedChannelsForEditing,
+    //       selectedMessageIdsEditing,
+    //       setSelectedMessageIdsEditing,
+    //     }}>
+    //     <GestureHandlerRootView style={{flex: 1}}>
+    //       <OverlayProvider bottomInset={bottom} value={{style: theme}}>
+    //         <ThemeProvider style={theme}>
+    //           <Chat client={chatClient} enableOfflineSupport>
+    //             <RootStack clientReady={clientReady} />
+    //           </Chat>
+    //         </ThemeProvider>
+    //       </OverlayProvider>
+    //     </GestureHandlerRootView>
+    //   </AppContext.Provider>
+    // </NavigationContainer>
+    <Slot></Slot>
   );
 };

@@ -1,0 +1,40 @@
+import { SafeAreaView, StatusBar, Text, View } from "react-native";
+// import {colors} from '../theme'
+// import {flex, sizes} from '../global'
+import React from "react";
+// import IconButton from '../../../constants/icons'
+import { useNavigation } from "@react-navigation/native";
+import IconButton from "../../atoms/IconButton";
+import { colors } from "~/theme";
+import { flex, sizes } from "~/global";
+
+export default ({ title }: { title: string }) => {
+  const { goBack } = useNavigation();
+
+  return (
+    <SafeAreaView
+      style={{
+        backgroundColor: colors.dark.secondary,
+        ...flex.directionRowItemsCenter,
+      }}
+    >
+      <StatusBar backgroundColor={colors.dark.secondary} />
+      <IconButton
+        onPress={goBack}
+        iconName={"ArrowLeft"}
+        pathFill={colors.dark.text}
+      />
+      <View style={{ padding: sizes.m, flex: 1 }}>
+        <Text
+          style={{
+            color: colors.dark.text,
+            fontWeight: "bold",
+            fontSize: 18,
+          }}
+        >
+          {title}
+        </Text>
+      </View>
+    </SafeAreaView>
+  );
+};
