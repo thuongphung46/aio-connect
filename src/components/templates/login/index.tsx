@@ -74,6 +74,7 @@ export const HomeTemplate = () => {
   // useFocusEffect(() => {
   //   getDataLocalStore();
   // });
+  //test cojmmit
 
   const requestLogin = useCallback(() => {
     dispatch(
