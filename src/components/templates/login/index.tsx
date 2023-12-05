@@ -75,32 +75,6 @@ export const HomeTemplate = () => {
   //   getDataLocalStore();
   // });
 
-  // Functions
-  // const updateUserData = (field: string, value: any) => {
-  //   let newData = { ...userData };
-  //   if (value !== userData[field]) {
-  //     newData[field] = value;
-  //     setUserData(newData);
-  //   }
-  //   if (field === "emp_id" && value && value.length === 6) {
-  //     dispatch(
-  //       Actions.fetchUserData(
-  //         "ONCHANGE",
-  //         value,
-  //         newData.emp_name,
-  //         (username) => {
-  //           setUserData((prevValue: any) => {
-  //             return {
-  //               ...prevValue,
-  //               emp_name: username,
-  //             };
-  //           });
-  //         }
-  //       )
-  //     );
-  //   }
-  // };
-
   const requestLogin = useCallback(() => {
     dispatch(
       Actions.requestLogin(userData, () => {
