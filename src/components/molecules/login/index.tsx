@@ -30,7 +30,8 @@ export const Login: FC<Props> = ({}) => {
               fontWeight: "bold",
               marginVertical: 12,
               color: COLORS.black,
-            }}>
+            }}
+          >
             Hi Welcome Back ! 👋
           </Text>
 
@@ -38,7 +39,8 @@ export const Login: FC<Props> = ({}) => {
             style={{
               fontSize: 16,
               color: COLORS.black,
-            }}>
+            }}
+          >
             Hello again you have been missed!
           </Text>
         </View>
@@ -49,7 +51,8 @@ export const Login: FC<Props> = ({}) => {
               fontSize: 16,
               fontWeight: "400",
               marginVertical: 8,
-            }}>
+            }}
+          >
             Email address
           </Text>
 
@@ -63,13 +66,16 @@ export const Login: FC<Props> = ({}) => {
               alignItems: "center",
               justifyContent: "center",
               paddingLeft: 22,
-            }}>
+            }}
+          >
             <TextInput
               placeholder="Enter your email address"
               placeholderTextColor={COLORS.black}
               keyboardType="email-address"
               style={{
                 width: "100%",
+                // paddingVertical: 8,
+                height: "100%",
               }}
             />
           </View>
@@ -81,7 +87,8 @@ export const Login: FC<Props> = ({}) => {
               fontSize: 16,
               fontWeight: "400",
               marginVertical: 8,
-            }}>
+            }}
+          >
             Password
           </Text>
 
@@ -94,14 +101,17 @@ export const Login: FC<Props> = ({}) => {
               borderRadius: 8,
               alignItems: "center",
               justifyContent: "center",
-              paddingLeft: 22,
-            }}>
+              paddingHorizontal: 24,
+            }}
+          >
             <TextInput
               placeholder="Enter your password"
               placeholderTextColor={COLORS.black}
               secureTextEntry={isPasswordShown}
               style={{
                 width: "100%",
+                // paddingVertical: 8,
+                height: "100%",
               }}
             />
 
@@ -110,7 +120,8 @@ export const Login: FC<Props> = ({}) => {
               style={{
                 position: "absolute",
                 right: 12,
-              }}>
+              }}
+            >
               {isPasswordShown == true ? (
                 <Ionicons name="eye-off" size={24} color={COLORS.black} />
               ) : (
@@ -124,7 +135,8 @@ export const Login: FC<Props> = ({}) => {
           style={{
             flexDirection: "row",
             marginVertical: 6,
-          }}>
+          }}
+        >
           <Checkbox
             style={{ marginRight: 8 }}
             value={isChecked}
@@ -149,7 +161,8 @@ export const Login: FC<Props> = ({}) => {
             flexDirection: "row",
             alignItems: "center",
             marginVertical: 20,
-          }}>
+          }}
+        >
           <View
             style={{
               flex: 1,
@@ -232,7 +245,8 @@ export const Login: FC<Props> = ({}) => {
             flexDirection: "row",
             justifyContent: "center",
             marginVertical: 22,
-          }}>
+          }}
+        >
           <Text style={{ fontSize: 16, color: COLORS.black }}>
             Don't have an account ?{" "}
           </Text>
@@ -243,7 +257,8 @@ export const Login: FC<Props> = ({}) => {
                 color: COLORS.primary,
                 fontWeight: "bold",
                 marginLeft: 6,
-              }}>
+              }}
+            >
               Register
             </Text>
           </Pressable>
