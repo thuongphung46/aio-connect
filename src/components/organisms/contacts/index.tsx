@@ -14,6 +14,7 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { contacts } from "~/src/constants/data";
 import { COLORS, FONTS } from "~/src/constants/color";
 import PageContainer from "../../atoms/page_container";
+import { router } from "expo-router";
 // import { contacts } from '../constants/data'
 interface Props {}
 export const Contacts: FC<Props> = ({}) => {
@@ -31,11 +32,9 @@ export const Contacts: FC<Props> = ({}) => {
   const renderItem = ({ item, index }: any) => (
     <TouchableOpacity
       key={index}
-      // onPress={() =>
-      //     navigation.navigate('PersonalChat', {
-      //         userName: item.userName,
-      //     })
-      // }
+      onPress={() => {
+        router.push("/personal_chat");
+      }}
       style={[
         {
           width: "100%",

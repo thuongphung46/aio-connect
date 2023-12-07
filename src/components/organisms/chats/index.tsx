@@ -17,6 +17,7 @@ import {
 import { contacts } from "~/src/constants/data";
 import { COLORS, FONTS } from "~/src/constants/color";
 import PageContainer from "../../atoms/page_container";
+import { router } from "expo-router";
 // import { FONTS, COLORS } from '../constants'
 // import { contacts } from '../constants/data'
 export interface Props {}
@@ -41,6 +42,9 @@ export const Chats: FC<Props> = ({}) => {
       //     }
       //     )
       // }
+      onPress={() => {
+        router.push("/personal_chat");
+      }}
       style={[
         {
           width: "100%",
