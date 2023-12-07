@@ -62,19 +62,19 @@ export const HomeTemplate = () => {
     }
   }, [client, dispatch]);
 
-  const getDataLocalStore = async () => {
-    let server_address: any = "";
-    server_address = await PxStorage.get(LocalStore.serverAddress);
-    if (!server_address) {
-      router.replace("/server_configuration");
-    } else {
-      ApiAddress.api = server_address;
-    }
-  };
+  // const getDataLocalStore = async () => {
+  //   let server_address: any = "";
+  //   server_address = await PxStorage.get(LocalStore.serverAddress);
+  //   if (!server_address) {
+  //     router.replace("/server_configuration");
+  //   } else {
+  //     ApiAddress.api = server_address;
+  //   }
+  // };
 
-  useFocusEffect(() => {
-    getDataLocalStore();
-  });
+  // useFocusEffect(() => {
+  //   getDataLocalStore();
+  // });
 
   // Functions
   // const updateUserData = (field: string, value: any) => {
