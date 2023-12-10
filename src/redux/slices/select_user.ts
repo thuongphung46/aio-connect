@@ -4,7 +4,7 @@ import { cloneDeep } from "lodash";
 
 // Define a type for the slice state
 export interface ItemState {
-  id?: number;
+  id: number;
   createdBy?: string;
   createdAt?: string;
   updatedBy?: string;
@@ -20,7 +20,7 @@ export interface ItemState {
 // Define the initial state using that type
 const initialState: ItemState = {
   //khởi tạo tất cả null
-  id: undefined,
+  id: 1,
   createdAt: "",
   createdBy: "",
   updatedAt: "",

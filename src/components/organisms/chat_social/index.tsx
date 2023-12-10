@@ -23,6 +23,7 @@ import { PxStorage } from "~/src/constants/common_function";
 import { GlobalVariable } from "~/src/constants/global_constant";
 import { setState } from "~/src/redux/slices/select_user";
 import { useAppDispatch } from "~/src/redux/hook";
+import { ChatSocialService } from "~/src/services/chat_social";
 // import { FONTS, COLORS } from '../constants'
 // import { contacts } from '../constants/data'
 export interface Props {}
@@ -61,25 +62,27 @@ export const getRandomImage = (): (typeof images)[keyof typeof images] => {
   return images[randomKey];
 };
 
-export const Chats: FC<Props> = ({}) => {
+export const ChatSocial: FC<Props> = ({}) => {
   const dispatch = useAppDispatch();
   const [listData, setListData] = useState<IListData[]>([]);
   const [search, setSearch] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState(contacts);
+  // const [filteredUsers, setFilteredUsers] = useState(contacts);
 
   const handleSearch = (text: string) => {
     setSearch(text);
-    const filteredData = contacts.filter((user) =>
-      user.userName.toLowerCase().includes(text.toLowerCase())
+    const filteredData = listData.filter((user) =>
+      user.chatName.toLowerCase().includes(text.toLowerCase())
     );
-    setFilteredUsers(filteredData);
+    setListData(filteredData);
   };
 
   useEffect(() => {
     const ID = GlobalVariable.token;
     // const ID = PxStorage.get("token");
     // console.log(ID);
-    ChatInternalService.GetList(ID).then((res) => {
+    ChatSocialService.GetList({
+      staffId: ID,
+    }).then((res) => {
       // console.log(res);
       if (res.code === 200) {
         setListData(res.data.content);
