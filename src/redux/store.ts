@@ -6,6 +6,7 @@ import { AppLoadingReducer } from "./slices/app_loading";
 import { CommonReducer } from "./slices/common";
 import { CouterReducer } from "./slices/counter";
 import { LoginReducer } from "./slices/login";
+import { SelectUserToChatReducer } from "./slices/select_user";
 import { MqttReducer } from "./slices/mqtt";
 import { ProductionOutputReducer } from "./slices/production_output";
 
@@ -18,6 +19,7 @@ export const store = configureStore({
     AppAlertReducer,
     CouterReducer,
     LoginReducer,
+    SelectUserToChatReducer,
     // AppLoadingReducer,
     // CommonReducer,
     // MqttReducer,

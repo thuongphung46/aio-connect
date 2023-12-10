@@ -13,10 +13,14 @@ import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import { Button } from "src/components/atoms/button";
 export interface Props {
-  // navigation: any;
+  handleSubmit: () => void;
+  onInputChange: (field: string, value: string) => void;
 }
-
-export const Login: FC<Props> = ({}) => {
+export interface IUser {
+  username: string;
+  password: string;
+}
+export const Login: FC<Props> = ({ handleSubmit, onInputChange }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
@@ -30,7 +34,8 @@ export const Login: FC<Props> = ({}) => {
               fontWeight: "bold",
               marginVertical: 12,
               color: COLORS.black,
-            }}>
+            }}
+          >
             Hi Welcome Back ! 👋
           </Text>
 
@@ -38,7 +43,8 @@ export const Login: FC<Props> = ({}) => {
             style={{
               fontSize: 16,
               color: COLORS.black,
-            }}>
+            }}
+          >
             Hello again you have been missed!
           </Text>
         </View>
@@ -49,8 +55,9 @@ export const Login: FC<Props> = ({}) => {
               fontSize: 16,
               fontWeight: "400",
               marginVertical: 8,
-            }}>
-            Email address
+            }}
+          >
+            User name
           </Text>
 
           <View
@@ -63,13 +70,17 @@ export const Login: FC<Props> = ({}) => {
               alignItems: "center",
               justifyContent: "center",
               paddingLeft: 22,
-            }}>
+            }}
+          >
             <TextInput
-              placeholder="Enter your email address"
+              placeholder="Enter user name"
               placeholderTextColor={COLORS.black}
               keyboardType="email-address"
               style={{
                 width: "100%",
+              }}
+              onChange={(e) => {
+                onInputChange("username", e.nativeEvent.text);
               }}
             />
           </View>
@@ -81,7 +92,8 @@ export const Login: FC<Props> = ({}) => {
               fontSize: 16,
               fontWeight: "400",
               marginVertical: 8,
-            }}>
+            }}
+          >
             Password
           </Text>
 
@@ -95,13 +107,17 @@ export const Login: FC<Props> = ({}) => {
               alignItems: "center",
               justifyContent: "center",
               paddingLeft: 22,
-            }}>
+            }}
+          >
             <TextInput
               placeholder="Enter your password"
               placeholderTextColor={COLORS.black}
               secureTextEntry={isPasswordShown}
               style={{
                 width: "100%",
+              }}
+              onChange={(e) => {
+                onInputChange("password", e.nativeEvent.text);
               }}
             />
 
@@ -110,7 +126,8 @@ export const Login: FC<Props> = ({}) => {
               style={{
                 position: "absolute",
                 right: 12,
-              }}>
+              }}
+            >
               {isPasswordShown == true ? (
                 <Ionicons name="eye-off" size={24} color={COLORS.black} />
               ) : (
@@ -124,7 +141,8 @@ export const Login: FC<Props> = ({}) => {
           style={{
             flexDirection: "row",
             marginVertical: 6,
-          }}>
+          }}
+        >
           <Checkbox
             style={{ marginRight: 8 }}
             value={isChecked}
@@ -137,6 +155,7 @@ export const Login: FC<Props> = ({}) => {
 
         <Button
           title="Login"
+          onPress={handleSubmit}
           filled
           style={{
             marginTop: 18,
@@ -149,7 +168,8 @@ export const Login: FC<Props> = ({}) => {
             flexDirection: "row",
             alignItems: "center",
             marginVertical: 20,
-          }}>
+          }}
+        >
           <View
             style={{
               flex: 1,
@@ -232,7 +252,8 @@ export const Login: FC<Props> = ({}) => {
             flexDirection: "row",
             justifyContent: "center",
             marginVertical: 22,
-          }}>
+          }}
+        >
           <Text style={{ fontSize: 16, color: COLORS.black }}>
             Don't have an account ?{" "}
           </Text>
@@ -243,7 +264,8 @@ export const Login: FC<Props> = ({}) => {
                 color: COLORS.primary,
                 fontWeight: "bold",
                 marginLeft: 6,
-              }}>
+              }}
+            >
               Register
             </Text>
           </Pressable>

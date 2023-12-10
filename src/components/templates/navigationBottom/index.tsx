@@ -3,9 +3,9 @@ import React, { FC } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome, Feather, Ionicons } from "@expo/vector-icons";
 import { COLORS, FONTS } from "~/src/constants/color";
-import { Chats } from "~/src/components/organisms/chats";
+import { Chats } from "~/src/components/organisms/chat_internal";
 import { More } from "~/src/components/organisms/more";
-import { Contacts } from "~/src/components/organisms/contacts";
+import { ChatSocial } from "~/src/components/organisms/chat_social";
 
 const Tab = createBottomTabNavigator();
 interface Props {}
@@ -28,8 +28,8 @@ export const BottomTabNavigation: FC<Props> = () => {
       }}
     >
       <Tab.Screen
-        name="Contacts"
-        component={Contacts}
+        name="ChatSocial"
+        component={ChatSocial}
         options={{
           tabBarIcon: ({ focused }) => {
             return (
@@ -47,7 +47,7 @@ export const BottomTabNavigation: FC<Props> = () => {
                         color: COLORS.secondaryBlack,
                       }}
                     >
-                      Contacts
+                      Social
                     </Text>
                     <FontAwesome name="circle" size={8} color={COLORS.black} />
                   </>
@@ -80,7 +80,7 @@ export const BottomTabNavigation: FC<Props> = () => {
                         color: COLORS.secondaryBlack,
                       }}
                     >
-                      Chats
+                      Internal
                     </Text>
                     <FontAwesome name="circle" size={8} color={COLORS.black} />
                   </>

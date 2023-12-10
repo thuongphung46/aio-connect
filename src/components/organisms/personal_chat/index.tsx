@@ -1,13 +1,17 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-// import { COLORS, SIZES, FONTS } from '../constants'
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import { GiftedChat, Send, Bubble, IMessage } from "react-native-gifted-chat";
 import { COLORS, FONTS } from "~/src/constants/color";
 import Images from "~/src/constants/images";
 import { router } from "expo-router";
+import { useAppSelector } from "~/src/redux/hook";
+import { getRandomImage } from "../chat_internal";
+import { ChatService } from "~/src/services/chat";
+import { cloneDeep } from "lodash";
+import { GlobalVariable } from "~/src/constants/global_constant";
 type Message = {
   _id: number;
   text: string;
@@ -18,29 +22,61 @@ type Message = {
     avatar: string;
   };
 };
+export interface IListMessage {
+  id: number;
+  createdBy: string;
+  createdAt: string;
+  updatedBy: string;
+  updatedAt: string;
+  isDeleted: number;
+  status: number;
+  content: string;
+  sender: string;
+  chatId: number;
+  staffId: number;
+}
 
 export const PersonalChat = ({}) => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const { chatId, chatName, id, type } = useAppSelector(
+    (state) => state.SelectUserToChatReducer
+  );
 
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          avatar: Images.user1,
-        },
-      },
-    ]);
+    ChatService.GetListMessage({
+      chatid: chatId,
+    }).then((res) => {
+      if (res.code === 200) {
+        let dataResponsive: IListMessage[] = cloneDeep(res.data.content);
+        const mappedMessages = dataResponsive.map((item) => ({
+          _id: item.id,
+          text: item.content,
+          createdAt: new Date(item.createdAt),
+          user: {
+            _id: item.staffId,
+            name: item.sender,
+            avatar: "", // You can add avatar information if available in IListMessage
+          },
+        }));
+        setMessages(mappedMessages);
+      }
+    });
   }, []);
 
   const onSend = useCallback((messages: any) => {
+    // console.log(messages);
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
+    ChatService.SendMessage({
+      chatId: chatId,
+      content: messages[0].text,
+      type: "CHAT",
+      sender: chatName,
+      staffId: GlobalVariable.token,
+    }).then((res) => {
+      console.log(res);
+    });
   }, []);
 
   // change button of send
@@ -117,7 +153,7 @@ export const PersonalChat = ({}) => {
               color={COLORS.black}
             />
           </TouchableOpacity>
-          <Text style={{ ...FONTS.h4, marginLeft: 8 }}>Athalia Muri</Text>
+          <Text style={{ ...FONTS.h4, marginLeft: 8 }}>{chatName}</Text>
         </View>
 
         <View
@@ -144,24 +180,11 @@ export const PersonalChat = ({}) => {
           </TouchableOpacity>
         </View>
       </View>
-
       <GiftedChat
         messages={messages}
-        onSend={(messages) => onSend(messages)}
-        user={{
-          _id: 1,
-        }}
-        renderBubble={renderBubble}
-        alwaysShowSend
-        renderSend={renderSend}
+        onSend={onSend}
         scrollToBottom
-        // textInputStyle={{
-        //     borderRadius: 22,
-        //     borderWidth: 1,
-        //     borderColor: COLORS.gray,
-        //     marginRight: 6,
-        //     paddingHorizontal: 12,
-        // }}
+        alwaysShowSend
         timeTextStyle={{
           left: {
             color: COLORS.gray,
@@ -172,6 +195,38 @@ export const PersonalChat = ({}) => {
             ...FONTS.body4,
           },
         }}
+        // loadEarlier={state.loadEarlier}
+        // onLoadEarlier={onLoadEarlier}
+        // isLoadingEarlier={state.isLoadingEarlier}
+        // parsePatterns={parsePatterns}
+        user={{
+          _id: GlobalVariable.token,
+          // name: chatName,
+          // avatar: getRandomImage(),
+        }}
+        renderBubble={renderBubble}
+        // onLongPressAvatar={onLongPressAvatar}
+        // onPressAvatar={onPressAvatar}
+        // onQuickReply={onQuickReply}
+        quickReplyStyle={{ borderRadius: 2 }}
+        quickReplyTextStyle={{
+          fontWeight: "200",
+        }}
+        // renderQuickReplySend={renderQuickReplySend}
+        // renderAccessory={renderAccessory}
+        // renderActions={renderCustomActions}
+        // renderSystemMessage={renderSystemMessage}
+        // renderCustomView={renderCustomView}
+        renderSend={renderSend}
+        keyboardShouldPersistTaps="never"
+        // timeTextStyle={{
+        //   left: { color: "red" },
+        //   right: { color: "yellow" },
+        // }}
+        // isTyping={state.isTyping}
+        // inverted={Platform.OS !== "web"}
+        inverted
+        infiniteScroll
       />
     </SafeAreaView>
   );
