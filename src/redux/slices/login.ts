@@ -3,6 +3,7 @@ import {
   showLoading,
   hideLoading,
   ShowAlert,
+  PxStorage,
 } from "~/src/constants/common_function";
 import { ResponseData } from "~/src/constants/http_response";
 import { all, put, takeLatest } from "redux-saga/effects";
@@ -10,6 +11,7 @@ import { CreateSagaAction } from "~/src/redux/common_function";
 import { UserService } from "../../services/login";
 import { GlobalVariable } from "~/src/constants/global_constant";
 import { reset } from "./production_output";
+import { IUser } from "~/src/components/molecules/login";
 
 // Define a type for the slice state
 interface LoginState {
@@ -40,7 +42,7 @@ export const {
   "LOGOUT_REQUEST",
 ]);
 export const Actions = {
-  requestLogin: (user_data: any, callback: () => void): any => ({
+  requestLogin: (user_data: IUser, callback: () => void): any => ({
     type: REQUEST_LOGIN,
     payload: {
       user_data,
@@ -96,14 +98,15 @@ function* requestLoginSaga(action: any) {
   const { user_data } = action.payload;
   try {
     const response: ResponseData = yield UserService.Login({
-      UserId: user_data.emp_id,
-      Password: user_data.password,
+      username: user_data.username,
+      password: user_data.password,
     });
-    const status = response.MessageCode === 200;
+    const status = response.code === 200;
     if (status) {
       permission = true;
-      GlobalVariable.token = response.Content.TokenId;
-      if (response.Message) message = response.Message;
+      GlobalVariable.token = response.data.staffId;
+      PxStorage.set("token", response.data.staffId);
+      if (response.message) message = response.message;
       action.payload.callback && action.payload.callback();
     }
     ShowAlert(
@@ -115,13 +118,13 @@ function* requestLoginSaga(action: any) {
   }
   yield put(requestLoginResult(permission));
   hideLoading();
-  if (permission)
-    yield fetchUserDataSaga({
-      payload: {
-        type: "SUBMIT",
-        id: user_data.emp_id,
-      },
-    });
+  // if (permission)
+  //   yield fetchUserDataSaga({
+  //     payload: {
+  //       type: "SUBMIT",
+  //       id: user_data.emp_id,
+  //     },
+  //   });
 }
 
 function* logoutSaga() {
@@ -148,42 +151,42 @@ function* checkAuthorizationSaga() {
   // if (!token) redirectToLogin();
 }
 
-function* fetchUserDataSaga(action: any) {
-  const { type, id, current_data } = action.payload;
-  if (type !== "ONCHANGE") showLoading();
-  try {
-    const response: ResponseData = yield UserService.GetUserName({
-      UserId: id,
-    });
-    switch (type) {
-      case "ONCHANGE":
-        let username = current_data;
-        if (response.MessageCode === 200) {
-          const response_data: any = response.Content[0];
-          username = response_data["U_NAME"];
-        }
-        action.payload.callback && action.payload.callback(username);
-        break;
-      case "SUBMIT":
-        let user_data = {
-          id: "",
-          username: "",
-        };
-        if (response.MessageCode === 200) {
-          const response_data: any = response.Content[0];
-          user_data = {
-            id: id,
-            username: response_data["U_NAME"],
-          };
-        } else ShowAlert("WARNING", response.Message as string);
-        yield put(fetchUserDataResult(user_data));
-        break;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-  hideLoading();
-}
+// function* fetchUserDataSaga(action: any) {
+//   const { type, id, current_data } = action.payload;
+//   if (type !== "ONCHANGE") showLoading();
+//   try {
+//     const response: ResponseData = yield UserService.GetUserName({
+//       UserId: id,
+//     });
+//     switch (type) {
+//       case "ONCHANGE":
+//         let username = current_data;
+//         if (response.code === 200) {
+//           const response_data: any = response.data[0];
+//           username = response_data["U_NAME"];
+//         }
+//         action.payload.callback && action.payload.callback(username);
+//         break;
+//       case "SUBMIT":
+//         let user_data = {
+//           id: "",
+//           username: "",
+//         };
+//         if (response.code === 200) {
+//           const response_data: any = response.data[0];
+//           user_data = {
+//             id: id,
+//             username: response_data["U_NAME"],
+//           };
+//         } else ShowAlert("WARNING", response.message as string);
+//         yield put(fetchUserDataResult(user_data));
+//         break;
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+//   hideLoading();
+// }
 
 export const {
   requestLoginResult,
@@ -198,7 +201,7 @@ export function* loginWatcher() {
   yield all([
     takeLatest(REQUEST_LOGIN, requestLoginSaga),
     takeLatest(LOGOUT_REQUEST, logoutSaga),
-    takeLatest(FETCH_USER_DATA, fetchUserDataSaga),
+    // takeLatest(FETCH_USER_DATA, fetchUserDataSaga),
     takeLatest(CHECK_AUTHORIZATION, checkAuthorizationSaga),
   ]);
 }

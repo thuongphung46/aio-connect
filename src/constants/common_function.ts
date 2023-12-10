@@ -156,8 +156,8 @@ export const PxStorage = {
   get: async (key: string): Promise<string> => {
     if (Platform.OS === "web") {
       try {
-        //const Util = require("../utils/util");
-        //const SHA256 = require("crypto-js/sha256");
+        // const Util = require("../utils/util");
+        // const SHA256 = require("crypto-js/sha256");
         const keySave = SHA256(key).toString();
         const value = localStorage.getItem(keySave);
         if (value !== "" && value !== null) {

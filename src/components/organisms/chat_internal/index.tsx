@@ -6,7 +6,7 @@ import {
   TextInput,
   FlatList,
 } from "react-native";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 // import PageContainer from '../components/PageContainer'
 import {
@@ -18,20 +18,73 @@ import { contacts } from "~/src/constants/data";
 import { COLORS, FONTS } from "~/src/constants/color";
 import PageContainer from "../../atoms/page_container";
 import { router } from "expo-router";
+import { ChatInternalService } from "~/src/services/chat_internal";
+import { PxStorage } from "~/src/constants/common_function";
+import { GlobalVariable } from "~/src/constants/global_constant";
 // import { FONTS, COLORS } from '../constants'
 // import { contacts } from '../constants/data'
 export interface Props {}
+export interface IListData {
+  id: number;
+  createdBy: string;
+  createdAt: string;
+  updatedBy: string;
+  updatedAt: string;
+  isDeleted: number;
+  status: number;
+  type: number;
+  staffId: number;
+  chatId: number;
+  chatName: string;
+}
+type ImageKey = keyof typeof images;
+
+const images = {
+  illustration: require("../../../../assets/images/illustration.png"),
+  cat: require("../../../../assets/images/cat.png"),
+  down: require("../../../../assets/images/down.png"),
+  usFlag: require("../../../../assets/images/us-flag.jpg"),
+  user1: require("../../../../assets/images/user1.jpg"),
+  user2: require("../../../../assets/images/user2.jpg"),
+  user3: require("../../../../assets/images/user3.jpg"),
+  user4: require("../../../../assets/images/user4.jpg"),
+  user5: require("../../../../assets/images/user5.jpg"),
+  user6: require("../../../../assets/images/user6.jpg"),
+  user7: require("../../../../assets/images/user7.jpg"),
+  user8: require("../../../../assets/images/user8.jpg"),
+};
+const getRandomImage = (): (typeof images)[keyof typeof images] => {
+  const imageKeys: ImageKey[] = Object.keys(images) as ImageKey[];
+  const randomKey = imageKeys[Math.floor(Math.random() * imageKeys.length)];
+  return images[randomKey];
+};
+
 export const Chats: FC<Props> = ({}) => {
+  const [listData, setListData] = useState<IListData[]>([]);
   const [search, setSearch] = useState("");
   const [filteredUsers, setFilteredUsers] = useState(contacts);
 
-  const handleSearch = (text: any) => {
+  const handleSearch = (text: string) => {
     setSearch(text);
     const filteredData = contacts.filter((user) =>
       user.userName.toLowerCase().includes(text.toLowerCase())
     );
     setFilteredUsers(filteredData);
   };
+
+  useEffect(() => {
+    const ID = GlobalVariable.token;
+    // const ID = PxStorage.get("token");
+    console.log(ID);
+    ChatInternalService.GetList(ID).then((res) => {
+      // console.log(res);
+      if (res.code === 200) {
+        setListData(res.data.content);
+      }
+    });
+  }, []);
+
+  const isOnline = Math.random() < 0.5;
 
   const renderItem = ({ item, index }: any) => (
     <TouchableOpacity
@@ -67,7 +120,8 @@ export const Chats: FC<Props> = ({}) => {
           marginRight: 22,
         }}
       >
-        {item.isOnline && item.isOnline == true && (
+        {/* {item.isOnline && item.isOnline == true && ( */}
+        {isOnline && (
           <View
             style={{
               height: 14,
@@ -85,7 +139,9 @@ export const Chats: FC<Props> = ({}) => {
         )}
 
         <Image
-          source={item.userImg}
+          // source={item.userImg}
+          source={getRandomImage()}
+          // src={getRandomImage()}
           resizeMode="contain"
           style={{
             height: 50,
@@ -99,13 +155,14 @@ export const Chats: FC<Props> = ({}) => {
           flexDirection: "column",
         }}
       >
-        <Text style={{ ...FONTS.h4, marginBottom: 4 }}>{item.userName}</Text>
+        <Text style={{ ...FONTS.h4, marginBottom: 4 }}>{item.chatName}</Text>
         <Text style={{ fontSize: 14, color: COLORS.secondaryGray }}>
           {item.lastSeen}
         </Text>
       </View>
     </TouchableOpacity>
   );
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <PageContainer>
@@ -238,12 +295,15 @@ export const Chats: FC<Props> = ({}) => {
           <View
             style={{
               paddingBottom: 100,
+              flex: 1,
+              // overflow: "scroll",
             }}
           >
             <FlatList
-              data={filteredUsers}
+              data={listData}
               renderItem={renderItem}
               keyExtractor={(item) => item.id.toString()}
+              scrollEnabled
             />
           </View>
         </View>

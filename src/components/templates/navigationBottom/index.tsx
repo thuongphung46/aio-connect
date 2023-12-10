@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome, Feather, Ionicons } from "@expo/vector-icons";
 import { COLORS, FONTS } from "~/src/constants/color";
-import { Chats } from "~/src/components/organisms/chats";
+import { Chats } from "~/src/components/organisms/chat_internal";
 import { More } from "~/src/components/organisms/more";
 import { Contacts } from "~/src/components/organisms/contacts";
 
