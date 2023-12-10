@@ -8,6 +8,7 @@ import { GiftedChat, Send, Bubble, IMessage } from "react-native-gifted-chat";
 import { COLORS, FONTS } from "~/src/constants/color";
 import Images from "~/src/constants/images";
 import { router } from "expo-router";
+import { useAppSelector } from "~/src/redux/hook";
 type Message = {
   _id: number;
   text: string;
@@ -21,6 +22,9 @@ type Message = {
 
 export const PersonalChat = ({}) => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const { chatId, chatName, id, type } = useAppSelector(
+    (state) => state.SelectUserToChatReducer
+  );
 
   useEffect(() => {
     setMessages([
@@ -117,7 +121,7 @@ export const PersonalChat = ({}) => {
               color={COLORS.black}
             />
           </TouchableOpacity>
-          <Text style={{ ...FONTS.h4, marginLeft: 8 }}>Athalia Muri</Text>
+          <Text style={{ ...FONTS.h4, marginLeft: 8 }}>{chatName}</Text>
         </View>
 
         <View

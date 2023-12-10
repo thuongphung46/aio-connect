@@ -6,7 +6,7 @@ import {
   TextInput,
   FlatList,
 } from "react-native";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 // import PageContainer from '../components/PageContainer'
 import {
@@ -21,6 +21,8 @@ import { router } from "expo-router";
 import { ChatInternalService } from "~/src/services/chat_internal";
 import { PxStorage } from "~/src/constants/common_function";
 import { GlobalVariable } from "~/src/constants/global_constant";
+import { setState } from "~/src/redux/slices/select_user";
+import { useAppDispatch } from "~/src/redux/hook";
 // import { FONTS, COLORS } from '../constants'
 // import { contacts } from '../constants/data'
 export interface Props {}
@@ -60,6 +62,7 @@ const getRandomImage = (): (typeof images)[keyof typeof images] => {
 };
 
 export const Chats: FC<Props> = ({}) => {
+  const dispatch = useAppDispatch();
   const [listData, setListData] = useState<IListData[]>([]);
   const [search, setSearch] = useState("");
   const [filteredUsers, setFilteredUsers] = useState(contacts);
@@ -85,6 +88,19 @@ export const Chats: FC<Props> = ({}) => {
   }, []);
 
   const isOnline = Math.random() < 0.5;
+  const handleSelectUser = useCallback((item: IListData) => {
+    console.log(item);
+    dispatch(
+      setState({
+        chatId: item.chatId,
+        chatName: item.chatName,
+        id: item.id,
+        type: item.type,
+      })
+    );
+
+    // router.push("/personal_chat");
+  }, []);
 
   const renderItem = ({ item, index }: any) => (
     <TouchableOpacity
@@ -95,9 +111,7 @@ export const Chats: FC<Props> = ({}) => {
       //     }
       //     )
       // }
-      onPress={() => {
-        router.push("/personal_chat");
-      }}
+      onPress={() => handleSelectUser(item)}
       style={[
         {
           width: "100%",
@@ -294,8 +308,8 @@ export const Chats: FC<Props> = ({}) => {
 
           <View
             style={{
-              paddingBottom: 100,
-              flex: 1,
+              // paddingBottom: 100,
+              flex: 0.9,
               // overflow: "scroll",
             }}
           >

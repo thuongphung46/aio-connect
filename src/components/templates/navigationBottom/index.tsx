@@ -47,7 +47,7 @@ export const BottomTabNavigation: FC<Props> = () => {
                         color: COLORS.secondaryBlack,
                       }}
                     >
-                      Contacts
+                      External
                     </Text>
                     <FontAwesome name="circle" size={8} color={COLORS.black} />
                   </>
@@ -80,7 +80,7 @@ export const BottomTabNavigation: FC<Props> = () => {
                         color: COLORS.secondaryBlack,
                       }}
                     >
-                      Chats
+                      Internal
                     </Text>
                     <FontAwesome name="circle" size={8} color={COLORS.black} />
                   </>
