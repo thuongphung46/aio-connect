@@ -1,6 +1,11 @@
+import { MaterialIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Dimensions, View, Text } from "react-native";
+import { Dimensions, View, Text, TouchableOpacity } from "react-native";
 import { LineChart, PieChart } from "react-native-chart-kit";
+import { COLORS, FONTS } from "~/src/constants/color";
+import { MainCard } from "../../atoms/card";
 
 const data = [
   {
@@ -41,43 +46,85 @@ const data = [
 ];
 export const Report = () => {
   return (
-    <View>
-      {/* <PieChart
-        data={data}
-        width={Dimensions.get("window").width}
-        height={220}
-        //   chartConfig={chartConfig}
-        accessor={"population"}
-        backgroundColor={"transparent"}
-        paddingLeft={"15"}
-        center={[10, 50]}
-        absolute
-      />
-       */}
+    <View
+      style={{
+        padding: 8,
+      }}
+    >
+      <StatusBar style="light" backgroundColor={COLORS.white} />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingHorizontal: 22,
+          backgroundColor: COLORS.white,
+          height: 60,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              router.back();
+            }}
+          >
+            <MaterialIcons
+              name="keyboard-arrow-left"
+              size={24}
+              color={COLORS.black}
+            />
+          </TouchableOpacity>
+          <Text style={{ ...FONTS.h4, marginLeft: 8 }}>
+            Customer statistics
+          </Text>
+        </View>
 
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => console.log("Menu")}
+            style={{
+              marginRight: 8,
+            }}
+          >
+            <MaterialIcons name="menu" size={24} color={COLORS.black} />
+          </TouchableOpacity>
+        </View>
+      </View>
       <View>
-        <Text>Bezier Line Chart</Text>
+        {/* <Text>Bezier Line Chart</Text> */}
         <LineChart
           data={{
-            labels: ["January", "February", "March", "April", "May", "June"],
+            labels: ["", "February", "March", "April", "May", "June"],
             datasets: [
               {
                 data: [
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
+                  Math.random(),
+                  Math.random(),
+                  Math.random(),
+                  Math.random(),
+                  Math.random(),
+                  Math.random(),
                 ],
               },
             ],
           }}
-          width={Dimensions.get("window").width} // from react-native
+          width={
+            Dimensions.get("window").width -
+            0.04 * Dimensions.get("window").width
+          } // from react-native
           height={220}
-          yAxisLabel="$"
-          yAxisSuffix="k"
-          yAxisInterval={1} // optional, defaults to 1
+          // yAxisLabel="$"
+          // yAxisSuffix="k"
+          // yAxisInterval={1} // optional, defaults to 1
           chartConfig={{
             backgroundColor: "#e26a00",
             backgroundGradientFrom: "#fb8c00",
@@ -99,6 +146,25 @@ export const Report = () => {
             marginVertical: 8,
             borderRadius: 16,
           }}
+        />
+      </View>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        <MainCard
+          qty_task={100}
+          percentage={"180"}
+          title={"Task"}
+          detail={"Customer quantity"}
+        />
+        <MainCard
+          qty_task={60}
+          percentage={"108"}
+          title={"Resolved"}
+          detail={"Message"}
         />
       </View>
     </View>

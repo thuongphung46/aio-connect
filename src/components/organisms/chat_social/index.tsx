@@ -5,8 +5,9 @@ import {
   Image,
   TextInput,
   FlatList,
+  ImageBackground,
 } from "react-native";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 // import PageContainer from '../components/PageContainer'
 import {
@@ -27,19 +28,6 @@ import { ChatSocialService } from "~/src/services/chat_social";
 // import { FONTS, COLORS } from '../constants'
 // import { contacts } from '../constants/data'
 export interface Props {}
-// export interface IListData {
-//   id: number;
-//   createdBy: string;
-//   createdAt: string;
-//   updatedBy: string;
-//   updatedAt: string;
-//   isDeleted: number;
-//   status: number;
-//   type: number;
-//   staffId: number;
-//   chatId: number;
-//   chatName: string;
-// }
 export interface IListData {
   id: number;
   createdBy: string;
@@ -49,7 +37,7 @@ export interface IListData {
   isDeleted: number;
   status: number;
   chatName: string;
-  socialType: "FACEBOOK" | "ZALO" | "INTERNAL";
+  socialType: "FACEBOOK" | "ZALO" | "INTERNAL" | "SHOPEE";
   psid: string;
   staffId: number;
   lastMessage: string;
@@ -70,7 +58,11 @@ const images = {
   user6: require("../../../../assets/images/user6.jpg"),
   user7: require("../../../../assets/images/user7.jpg"),
   user8: require("../../../../assets/images/user8.jpg"),
+  fb: require("../../../../assets/images/icon_facebook.png"),
+  zalo: require("../../../../assets/images/icon_zalo.png"),
+  shoppee: require("../../../../assets/images/shopee.png"),
 };
+
 export const getRandomImage = (): (typeof images)[keyof typeof images] => {
   const imageKeys: ImageKey[] = Object.keys(images) as ImageKey[];
   const randomKey = imageKeys[Math.floor(Math.random() * imageKeys.length)];
@@ -119,6 +111,31 @@ export const ChatSocial: FC<Props> = ({}) => {
     );
 
     router.push("/personal_chat");
+  }, []);
+
+  const renderIconChatSocial = useCallback((item: any) => {
+    switch (item.socialType) {
+      case "FACEBOOK":
+        return (
+          <ImageBackground source={images.fb}>
+            {/* Any other components or styling related to the Facebook icon */}
+          </ImageBackground>
+        );
+      case "ZALO":
+        return (
+          <ImageBackground source={images.zalo}>
+            {/* Any other components or styling related to the Zalo icon */}
+          </ImageBackground>
+        );
+      case "SHOPEE":
+        return (
+          <ImageBackground source={images.shoppee}>
+            {/* Any other components or styling related to the Shopee icon */}
+          </ImageBackground>
+        );
+      default:
+        return null; // Return null for cases where socialType doesn't match any known type
+    }
   }, []);
 
   const renderItem = ({ item, index }: any) => (
@@ -183,6 +200,7 @@ export const ChatSocial: FC<Props> = ({}) => {
         }}
       >
         <Text style={{ ...FONTS.h4, marginBottom: 4 }}>{item.chatName}</Text>
+        {renderIconChatSocial(item)}
         <Text style={{ fontSize: 14, color: COLORS.secondaryGray }}>
           {item.lastSeen}
         </Text>

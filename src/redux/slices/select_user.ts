@@ -11,7 +11,7 @@ export interface ItemState {
   chatId?: any;
   psid?: any;
   chatName?: string;
-  type_chat?: "FACEBOOK" | "ZALO" | "INTERNAL";
+  type_chat?: "FACEBOOK" | "ZALO" | "INTERNAL" | "SHOPEE";
 }
 
 // Define the initial state using that type

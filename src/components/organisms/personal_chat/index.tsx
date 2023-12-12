@@ -46,22 +46,22 @@ export const PersonalChat = ({}) => {
   useEffect(() => {
     switch (type_chat) {
       case "FACEBOOK":
-        ChatService.GetListMessage({
+        ChatSocialService.GetListHistoryChat({
           chatid: chatId,
         }).then((res) => {
           if (res.code === 200) {
-            // let dataResponsive: IListMessage[] = cloneDeep(res.data.content);
-            // const mappedMessages = dataResponsive.map((item) => ({
-            //   _id: item.id,
-            //   text: item.content,
-            //   createdAt: new Date(item.createdAt),
-            //   user: {
-            //     _id: item.staffId,
-            //     name: item.sender,
-            //     avatar: "", // You can add avatar information if available in IListMessage
-            //   },
-            // }));
-            // setMessages(mappedMessages);
+            let dataResponsive: IListMessage[] = cloneDeep(res.data.content);
+            const mappedMessages = dataResponsive.map((item) => ({
+              _id: item.id,
+              text: item.content,
+              createdAt: new Date(item.createdAt),
+              user: {
+                _id: item.staffId,
+                name: "",
+                avatar: "", // You can add avatar information if available in IListMessage
+              },
+            }));
+            setMessages(mappedMessages);
           }
         });
         break;

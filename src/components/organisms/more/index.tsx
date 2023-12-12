@@ -10,9 +10,11 @@ import {
 } from "@expo/vector-icons";
 import { COLORS, FONTS } from "~/src/constants/color";
 import PageContainer from "../../atoms/page_container";
+import { useRouter } from "expo-router";
 
 interface Props {}
 export const More: FC<Props> = ({}) => {
+  const router = useRouter();
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <PageContainer>
@@ -108,7 +110,7 @@ export const More: FC<Props> = ({}) => {
 
           <TouchableOpacity
             onPress={() => {
-              console.log("Pressed");
+              router.push("/report");
             }}
             style={{
               flexDirection: "row",
@@ -124,11 +126,13 @@ export const More: FC<Props> = ({}) => {
               }}
             >
               <Ionicons
-                name="chatbubble-outline"
+                name="analytics-outline"
                 size={24}
                 color={COLORS.black}
               />
-              <Text style={{ ...FONTS.h4, marginLeft: 12 }}> Chats</Text>
+              <Text style={{ ...FONTS.h4, marginLeft: 12 }}>
+                Customer statistics
+              </Text>
             </View>
             <MaterialIcons
               name="keyboard-arrow-right"

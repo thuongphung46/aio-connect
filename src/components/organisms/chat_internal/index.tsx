@@ -89,13 +89,14 @@ export const Chats: FC<Props> = ({}) => {
 
   const isOnline = Math.random() < 0.5;
   const handleSelectUser = useCallback((item: IListData) => {
-    console.log(item);
+    // console.log(item);
     dispatch(
       setState({
         chatId: item.chatId,
         chatName: item.chatName,
         id: item.id,
         type: item.type,
+        type_chat: "INTERNAL",
       })
     );
 
