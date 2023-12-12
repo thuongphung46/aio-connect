@@ -5,32 +5,26 @@ import { cloneDeep } from "lodash";
 // Define a type for the slice state
 export interface ItemState {
   id: number;
-  createdBy?: string;
-  createdAt?: string;
-  updatedBy?: string;
-  updatedAt?: string;
-  isDeleted?: number;
   status?: number;
   type?: number;
   staffId?: number;
-  chatId?: number;
+  chatId?: any;
+  psid?: any;
   chatName?: string;
+  type_chat?: "FACEBOOK" | "ZALO" | "INTERNAL";
 }
 
 // Define the initial state using that type
 const initialState: ItemState = {
   //khởi tạo tất cả null
   id: 1,
-  createdAt: "",
-  createdBy: "",
-  updatedAt: "",
-  updatedBy: "",
-  isDeleted: undefined,
   staffId: undefined,
   chatId: undefined,
   chatName: "",
   type: undefined,
+  psid: undefined,
   status: undefined,
+  type_chat: "INTERNAL",
 };
 
 export const selectUserToChatSlice = createSlice({

@@ -27,6 +27,19 @@ import { ChatSocialService } from "~/src/services/chat_social";
 // import { FONTS, COLORS } from '../constants'
 // import { contacts } from '../constants/data'
 export interface Props {}
+// export interface IListData {
+//   id: number;
+//   createdBy: string;
+//   createdAt: string;
+//   updatedBy: string;
+//   updatedAt: string;
+//   isDeleted: number;
+//   status: number;
+//   type: number;
+//   staffId: number;
+//   chatId: number;
+//   chatName: string;
+// }
 export interface IListData {
   id: number;
   createdBy: string;
@@ -35,11 +48,13 @@ export interface IListData {
   updatedAt: string;
   isDeleted: number;
   status: number;
-  type: number;
-  staffId: number;
-  chatId: number;
   chatName: string;
+  socialType: "FACEBOOK" | "ZALO" | "INTERNAL";
+  psid: string;
+  staffId: number;
+  lastMessage: string;
 }
+
 type ImageKey = keyof typeof images;
 
 const images = {
@@ -95,10 +110,11 @@ export const ChatSocial: FC<Props> = ({}) => {
     console.log(item);
     dispatch(
       setState({
-        chatId: item.chatId,
+        chatId: item.id,
         chatName: item.chatName,
         id: item.id,
-        type: item.type,
+        psid: item.psid,
+        type_chat: item.socialType,
       })
     );
 

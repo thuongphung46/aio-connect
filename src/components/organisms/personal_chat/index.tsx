@@ -12,6 +12,7 @@ import { getRandomImage } from "../chat_internal";
 import { ChatService } from "~/src/services/chat";
 import { cloneDeep } from "lodash";
 import { GlobalVariable } from "~/src/constants/global_constant";
+import { ChatSocialService } from "~/src/services/chat_social";
 type Message = {
   _id: number;
   text: string;
@@ -38,45 +39,86 @@ export interface IListMessage {
 
 export const PersonalChat = ({}) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const { chatId, chatName, id, type } = useAppSelector(
+  const { chatId, chatName, id, type, type_chat, psid } = useAppSelector(
     (state) => state.SelectUserToChatReducer
   );
 
   useEffect(() => {
-    ChatService.GetListMessage({
-      chatid: chatId,
-    }).then((res) => {
-      if (res.code === 200) {
-        let dataResponsive: IListMessage[] = cloneDeep(res.data.content);
-        const mappedMessages = dataResponsive.map((item) => ({
-          _id: item.id,
-          text: item.content,
-          createdAt: new Date(item.createdAt),
-          user: {
-            _id: item.staffId,
-            name: item.sender,
-            avatar: "", // You can add avatar information if available in IListMessage
-          },
-        }));
-        setMessages(mappedMessages);
-      }
-    });
+    switch (type_chat) {
+      case "FACEBOOK":
+        ChatService.GetListMessage({
+          chatid: chatId,
+        }).then((res) => {
+          if (res.code === 200) {
+            // let dataResponsive: IListMessage[] = cloneDeep(res.data.content);
+            // const mappedMessages = dataResponsive.map((item) => ({
+            //   _id: item.id,
+            //   text: item.content,
+            //   createdAt: new Date(item.createdAt),
+            //   user: {
+            //     _id: item.staffId,
+            //     name: item.sender,
+            //     avatar: "", // You can add avatar information if available in IListMessage
+            //   },
+            // }));
+            // setMessages(mappedMessages);
+          }
+        });
+        break;
+      case "INTERNAL":
+        ChatService.GetListMessage({
+          chatid: chatId,
+        }).then((res) => {
+          if (res.code === 200) {
+            let dataResponsive: IListMessage[] = cloneDeep(res.data.content);
+            const mappedMessages = dataResponsive.map((item) => ({
+              _id: item.id,
+              text: item.content,
+              createdAt: new Date(item.createdAt),
+              user: {
+                _id: item.staffId,
+                name: item.sender,
+                avatar: "", // You can add avatar information if available in IListMessage
+              },
+            }));
+            setMessages(mappedMessages);
+          }
+        });
+      default:
+        break;
+    }
   }, []);
 
   const onSend = useCallback((messages: any) => {
-    // console.log(messages);
+    console.log(messages);
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
-    ChatService.SendMessage({
-      chatId: chatId,
-      content: messages[0].text,
-      type: "CHAT",
-      sender: chatName,
-      staffId: GlobalVariable.token,
-    }).then((res) => {
-      console.log(res);
-    });
+    switch (type_chat) {
+      case "FACEBOOK":
+        ChatSocialService.SendFB({
+          message: {
+            text: messages[0].text,
+          },
+          messaging_type: "RESPONSE",
+          recipient: {
+            id: psid,
+          },
+          chatId: chatId,
+          staffId: GlobalVariable.token,
+        }).then((res) => {});
+        break;
+      case "INTERNAL":
+        ChatService.SendMessage({
+          chatId: chatId,
+          content: messages[0].text,
+          type: "CHAT",
+          sender: chatName,
+          staffId: GlobalVariable.token,
+        }).then((res) => {});
+      default:
+        break;
+    }
   }, []);
 
   // change button of send
