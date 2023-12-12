@@ -107,7 +107,7 @@ export const ChatSocial: FC<Props> = ({}) => {
 
   const isOnline = Math.random() < 0.5;
   const handleSelectUser = useCallback((item: IListData) => {
-    console.log(item);
+    // console.log(item);
     dispatch(
       setState({
         chatId: item.id,

@@ -90,7 +90,7 @@ export const PersonalChat = ({}) => {
   }, []);
 
   const onSend = useCallback((messages: any) => {
-    console.log(messages);
+    // console.log(messages);
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
