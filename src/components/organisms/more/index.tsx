@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   AntDesign,
@@ -11,10 +11,24 @@ import {
 import { COLORS, FONTS } from "~/src/constants/color";
 import PageContainer from "../../atoms/page_container";
 import { useRouter } from "expo-router";
+import { UserService } from "~/src/services/login";
+import { GlobalVariable } from "~/src/constants/global_constant";
 
 interface Props {}
 export const More: FC<Props> = ({}) => {
   const router = useRouter();
+
+  const hanldleLogout = useCallback(() => {
+    const ID = GlobalVariable.token;
+    UserService.Logout({
+      staffId: ID,
+    }).then((res) => {
+      if (res.code === 200) {
+        router.push("/");
+      }
+    });
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <PageContainer>
@@ -25,8 +39,7 @@ export const More: FC<Props> = ({}) => {
             alignItems: "center",
             marginHorizontal: 22,
             marginVertical: 22,
-          }}
-        >
+          }}>
           <Text style={{ ...FONTS.h4 }}>More</Text>
         </View>
         <View
@@ -35,8 +48,7 @@ export const More: FC<Props> = ({}) => {
             alignItems: "center",
             justifyContent: "space-between",
             marginHorizontal: 22,
-          }}
-        >
+          }}>
           <View
             style={{
               height: 60,
@@ -45,16 +57,14 @@ export const More: FC<Props> = ({}) => {
               backgroundColor: COLORS.secondaryWhite,
               alignItems: "center",
               justifyContent: "center",
-            }}
-          >
+            }}>
             <AntDesign name="user" size={24} color={COLORS.black} />
           </View>
           <View
             style={{
               flexDirection: "column",
               marginHorizontal: 22,
-            }}
-          >
+            }}>
             <Text style={{ ...FONTS.h4, marginVertical: 6 }}>
               Almayra Zamzamy
             </Text>
@@ -66,8 +76,7 @@ export const More: FC<Props> = ({}) => {
           <TouchableOpacity
             onPress={() => {
               console.log("pressed");
-            }}
-          >
+            }}>
             <MaterialIcons
               name="keyboard-arrow-right"
               size={24}
@@ -79,8 +88,7 @@ export const More: FC<Props> = ({}) => {
         <View
           style={{
             marginTop: 32,
-          }}
-        >
+          }}>
           <TouchableOpacity
             onPress={() => {
               console.log("Pressed");
@@ -90,14 +98,12 @@ export const More: FC<Props> = ({}) => {
               justifyContent: "space-between",
               marginHorizontal: 22,
               paddingVertical: 12,
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <AntDesign name="user" size={24} color={COLORS.black} />
               <Text style={{ ...FONTS.h4, marginLeft: 12 }}> Account</Text>
             </View>
@@ -117,14 +123,12 @@ export const More: FC<Props> = ({}) => {
               justifyContent: "space-between",
               marginHorizontal: 22,
               paddingVertical: 12,
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <Ionicons
                 name="analytics-outline"
                 size={24}
@@ -150,14 +154,12 @@ export const More: FC<Props> = ({}) => {
               justifyContent: "space-between",
               marginHorizontal: 22,
               paddingVertical: 12,
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <Entypo name="light-down" size={24} color={COLORS.black} />
               <Text style={{ ...FONTS.h4, marginLeft: 12 }}> Appearance</Text>
             </View>
@@ -177,14 +179,12 @@ export const More: FC<Props> = ({}) => {
               justifyContent: "space-between",
               marginHorizontal: 22,
               paddingVertical: 12,
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <Ionicons
                 name="notifications-outline"
                 size={24}
@@ -208,14 +208,12 @@ export const More: FC<Props> = ({}) => {
               justifyContent: "space-between",
               marginHorizontal: 22,
               paddingVertical: 12,
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <MaterialCommunityIcons
                 name="shield-lock-open-outline"
                 size={24}
@@ -239,14 +237,12 @@ export const More: FC<Props> = ({}) => {
               justifyContent: "space-between",
               marginHorizontal: 22,
               paddingVertical: 12,
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <AntDesign name="folder1" size={24} color={COLORS.black} />
               <Text style={{ ...FONTS.h4, marginLeft: 12 }}>Data usage</Text>
             </View>
@@ -266,14 +262,12 @@ export const More: FC<Props> = ({}) => {
               justifyContent: "space-between",
               marginHorizontal: 22,
               paddingVertical: 12,
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <Ionicons
                 name="help-circle-outline"
                 size={24}
@@ -297,14 +291,12 @@ export const More: FC<Props> = ({}) => {
               justifyContent: "space-between",
               marginHorizontal: 22,
               paddingVertical: 12,
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <MaterialCommunityIcons
                 name="email-outline"
                 size={24}
@@ -313,6 +305,33 @@ export const More: FC<Props> = ({}) => {
               <Text style={{ ...FONTS.h4, marginLeft: 12 }}>
                 Invite Your Friends
               </Text>
+            </View>
+            <MaterialIcons
+              name="keyboard-arrow-right"
+              size={24}
+              color={COLORS.black}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={hanldleLogout}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginHorizontal: 22,
+              paddingVertical: 12,
+            }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
+              <MaterialCommunityIcons
+                name="email-outline"
+                size={24}
+                color={COLORS.black}
+              />
+              <Text style={{ ...FONTS.h4, marginLeft: 12 }}>Logout</Text>
             </View>
             <MaterialIcons
               name="keyboard-arrow-right"
