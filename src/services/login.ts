@@ -4,6 +4,9 @@ export const UserService = {
   Login: async (values: any) => {
     return await Request(Controller).postAsync("login", values);
   },
+  Logout: async (values: any) => {
+    return await Request(Controller).postAsync("logout", values);
+  },
   GetUserName: async (values: any) => {
     return await Request(Controller).getAsync("GetUserName", values);
   },

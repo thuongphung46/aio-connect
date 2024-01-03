@@ -5,8 +5,9 @@ import {
   Image,
   TextInput,
   FlatList,
+  ImageBackground,
 } from "react-native";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 // import PageContainer from '../components/PageContainer'
 import {
@@ -35,11 +36,13 @@ export interface IListData {
   updatedAt: string;
   isDeleted: number;
   status: number;
-  type: number;
-  staffId: number;
-  chatId: number;
   chatName: string;
+  socialType: "FACEBOOK" | "ZALO" | "INTERNAL" | "SHOPEE";
+  psid: string;
+  staffId: number;
+  lastMessage: string;
 }
+
 type ImageKey = keyof typeof images;
 
 const images = {
@@ -55,7 +58,11 @@ const images = {
   user6: require("../../../../assets/images/user6.jpg"),
   user7: require("../../../../assets/images/user7.jpg"),
   user8: require("../../../../assets/images/user8.jpg"),
+  fb: require("../../../../assets/images/icon_facebook.png"),
+  zalo: require("../../../../assets/images/icon_zalo.png"),
+  shoppee: require("../../../../assets/images/shopee.png"),
 };
+
 export const getRandomImage = (): (typeof images)[keyof typeof images] => {
   const imageKeys: ImageKey[] = Object.keys(images) as ImageKey[];
   const randomKey = imageKeys[Math.floor(Math.random() * imageKeys.length)];
@@ -92,17 +99,57 @@ export const ChatSocial: FC<Props> = ({}) => {
 
   const isOnline = Math.random() < 0.5;
   const handleSelectUser = useCallback((item: IListData) => {
-    console.log(item);
     dispatch(
       setState({
-        chatId: item.chatId,
+        chatId: item.id,
         chatName: item.chatName,
         id: item.id,
-        type: item.type,
+        psid: item.psid,
+        type_chat: item.socialType,
       })
     );
 
     router.push("/personal_chat");
+  }, []);
+
+  const renderIconChatSocial = useCallback((item: any) => {
+    switch (item.socialType) {
+      case "FACEBOOK":
+        return (
+          <ImageBackground
+            style={{
+              width: 16,
+              height: 16,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            source={images.fb}></ImageBackground>
+        );
+      case "ZALO":
+        return (
+          <ImageBackground
+            style={{
+              width: 16,
+              height: 16,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            source={images.zalo}></ImageBackground>
+        );
+      case "SHOPEE":
+        return (
+          <ImageBackground
+            style={{
+              width: 16,
+              height: 16,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            source={images.shoppee}></ImageBackground>
+        );
+      default:
+        return null; // Return null for cases where socialType doesn't match any known type
+    }
   }, []);
 
   const renderItem = ({ item, index }: any) => (
@@ -123,14 +170,12 @@ export const ChatSocial: FC<Props> = ({}) => {
               backgroundColor: COLORS.tertiaryWhite,
             }
           : null,
-      ]}
-    >
+      ]}>
       <View
         style={{
           paddingVertical: 15,
           marginRight: 22,
-        }}
-      >
+        }}>
         {/* {item.isOnline && item.isOnline == true && ( */}
         {isOnline && (
           <View
@@ -145,14 +190,13 @@ export const ChatSocial: FC<Props> = ({}) => {
               top: 14,
               right: 2,
               zIndex: 1000,
-            }}
-          ></View>
+            }}></View>
         )}
 
         <Image
-          // source={item.userImg}
-          source={getRandomImage()}
-          // src={getRandomImage()}
+          source={{
+            uri: `data:image/png;base64,${item.img}`,
+          }}
           resizeMode="contain"
           style={{
             height: 50,
@@ -163,13 +207,22 @@ export const ChatSocial: FC<Props> = ({}) => {
       </View>
       <View
         style={{
-          flexDirection: "column",
-        }}
-      >
+          width: "100%",
+        }}>
         <Text style={{ ...FONTS.h4, marginBottom: 4 }}>{item.chatName}</Text>
-        <Text style={{ fontSize: 14, color: COLORS.secondaryGray }}>
-          {item.lastSeen}
-        </Text>
+        <View
+          style={{
+            ...FONTS.h4,
+            flexDirection: "row",
+            width: "100%",
+            alignItems: "center",
+          }}>
+          <Text
+            style={{ fontSize: 14, color: COLORS.secondaryGray, width: "70%" }}>
+            {item.lastMessage}
+          </Text>
+          {renderIconChatSocial(item)}
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -185,8 +238,7 @@ export const ChatSocial: FC<Props> = ({}) => {
               alignItems: "center",
               marginHorizontal: 22,
               marginTop: 22,
-            }}
-          >
+            }}>
             <Text style={{ ...FONTS.h4 }}>Chats</Text>
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity onPress={() => console.log("Add contacts")}>
@@ -200,8 +252,7 @@ export const ChatSocial: FC<Props> = ({}) => {
                 style={{
                   marginLeft: 12,
                 }}
-                onPress={() => console.log("Add contacts")}
-              >
+                onPress={() => console.log("Add contacts")}>
                 <MaterialCommunityIcons
                   name="playlist-check"
                   size={20}
@@ -216,15 +267,13 @@ export const ChatSocial: FC<Props> = ({}) => {
               marginHorizontal: 22,
               flexDirection: "row",
               alignItems: "center",
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "column",
                 alignItems: "center",
                 marginRight: 4,
-              }}
-            >
+              }}>
               <TouchableOpacity
                 style={{
                   height: 50,
@@ -234,8 +283,7 @@ export const ChatSocial: FC<Props> = ({}) => {
                   justifyContent: "center",
                   backgroundColor: "#e6edff",
                   marginBottom: 4,
-                }}
-              >
+                }}>
                 <AntDesign name="plus" size={24} color={COLORS.black} />
               </TouchableOpacity>
             </View>
@@ -250,14 +298,12 @@ export const ChatSocial: FC<Props> = ({}) => {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                  }}
-                >
+                  }}>
                   <TouchableOpacity
                     style={{
                       paddingVertical: 15,
                       marginRight: 22,
-                    }}
-                  >
+                    }}>
                     <Image
                       source={item.userImg}
                       resizeMode="contain"
@@ -283,8 +329,7 @@ export const ChatSocial: FC<Props> = ({}) => {
               marginVertical: 22,
               paddingHorizontal: 12,
               borderRadius: 20,
-            }}
-          >
+            }}>
             <Ionicons
               name="ios-search-outline"
               size={24}
@@ -305,9 +350,8 @@ export const ChatSocial: FC<Props> = ({}) => {
 
           <View
             style={{
-              flex: 0.9,
-            }}
-          >
+              flex: 0.8,
+            }}>
             <FlatList
               data={listData}
               renderItem={renderItem}

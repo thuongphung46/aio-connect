@@ -89,13 +89,14 @@ export const Chats: FC<Props> = ({}) => {
 
   const isOnline = Math.random() < 0.5;
   const handleSelectUser = useCallback((item: IListData) => {
-    console.log(item);
+    // console.log(item);
     dispatch(
       setState({
         chatId: item.chatId,
         chatName: item.chatName,
         id: item.id,
         type: item.type,
+        type_chat: "INTERNAL",
       })
     );
 
@@ -120,14 +121,12 @@ export const Chats: FC<Props> = ({}) => {
               backgroundColor: COLORS.tertiaryWhite,
             }
           : null,
-      ]}
-    >
+      ]}>
       <View
         style={{
           paddingVertical: 15,
           marginRight: 22,
-        }}
-      >
+        }}>
         {/* {item.isOnline && item.isOnline == true && ( */}
         {isOnline && (
           <View
@@ -142,8 +141,7 @@ export const Chats: FC<Props> = ({}) => {
               top: 14,
               right: 2,
               zIndex: 1000,
-            }}
-          ></View>
+            }}></View>
         )}
 
         <Image
@@ -161,8 +159,7 @@ export const Chats: FC<Props> = ({}) => {
       <View
         style={{
           flexDirection: "column",
-        }}
-      >
+        }}>
         <Text style={{ ...FONTS.h4, marginBottom: 4 }}>{item.chatName}</Text>
         <Text style={{ fontSize: 14, color: COLORS.secondaryGray }}>
           {item.lastSeen}
@@ -182,8 +179,7 @@ export const Chats: FC<Props> = ({}) => {
               alignItems: "center",
               marginHorizontal: 22,
               marginTop: 22,
-            }}
-          >
+            }}>
             <Text style={{ ...FONTS.h4 }}>Chats</Text>
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity onPress={() => console.log("Add contacts")}>
@@ -197,8 +193,7 @@ export const Chats: FC<Props> = ({}) => {
                 style={{
                   marginLeft: 12,
                 }}
-                onPress={() => console.log("Add contacts")}
-              >
+                onPress={() => console.log("Add contacts")}>
                 <MaterialCommunityIcons
                   name="playlist-check"
                   size={20}
@@ -213,15 +208,13 @@ export const Chats: FC<Props> = ({}) => {
               marginHorizontal: 22,
               flexDirection: "row",
               alignItems: "center",
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: "column",
                 alignItems: "center",
                 marginRight: 4,
-              }}
-            >
+              }}>
               <TouchableOpacity
                 style={{
                   height: 50,
@@ -231,8 +224,7 @@ export const Chats: FC<Props> = ({}) => {
                   justifyContent: "center",
                   backgroundColor: "#e6edff",
                   marginBottom: 4,
-                }}
-              >
+                }}>
                 <AntDesign name="plus" size={24} color={COLORS.black} />
               </TouchableOpacity>
             </View>
@@ -247,14 +239,12 @@ export const Chats: FC<Props> = ({}) => {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                  }}
-                >
+                  }}>
                   <TouchableOpacity
                     style={{
                       paddingVertical: 15,
                       marginRight: 22,
-                    }}
-                  >
+                    }}>
                     <Image
                       source={item.userImg}
                       resizeMode="contain"
@@ -280,8 +270,7 @@ export const Chats: FC<Props> = ({}) => {
               marginVertical: 22,
               paddingHorizontal: 12,
               borderRadius: 20,
-            }}
-          >
+            }}>
             <Ionicons
               name="ios-search-outline"
               size={24}
@@ -302,9 +291,8 @@ export const Chats: FC<Props> = ({}) => {
 
           <View
             style={{
-              flex: 0.9,
-            }}
-          >
+              flex: 0.8,
+            }}>
             <FlatList
               data={listData}
               renderItem={renderItem}

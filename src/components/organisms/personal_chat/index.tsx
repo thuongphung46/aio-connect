@@ -12,6 +12,8 @@ import { getRandomImage } from "../chat_internal";
 import { ChatService } from "~/src/services/chat";
 import { cloneDeep } from "lodash";
 import { GlobalVariable } from "~/src/constants/global_constant";
+import { ChatSocialService } from "~/src/services/chat_social";
+import { encrypt, decrypt } from "~/src/constants/common_function";
 type Message = {
   _id: number;
   text: string;
@@ -36,47 +38,88 @@ export interface IListMessage {
   staffId: number;
 }
 
+const key = "1234567890123456";
 export const PersonalChat = ({}) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const { chatId, chatName, id, type } = useAppSelector(
+  const { chatId, chatName, id, type, type_chat, psid } = useAppSelector(
     (state) => state.SelectUserToChatReducer
   );
 
   useEffect(() => {
-    ChatService.GetListMessage({
-      chatid: chatId,
-    }).then((res) => {
-      if (res.code === 200) {
-        let dataResponsive: IListMessage[] = cloneDeep(res.data.content);
-        const mappedMessages = dataResponsive.map((item) => ({
-          _id: item.id,
-          text: item.content,
-          createdAt: new Date(item.createdAt),
-          user: {
-            _id: item.staffId,
-            name: item.sender,
-            avatar: "", // You can add avatar information if available in IListMessage
-          },
-        }));
-        setMessages(mappedMessages);
-      }
-    });
+    switch (type_chat) {
+      case "FACEBOOK":
+        ChatSocialService.GetListHistoryChat({
+          chatId: chatId,
+        }).then((res) => {
+          if (res.code === 200) {
+            let dataResponsive: IListMessage[] = cloneDeep(res.data.content);
+            const mappedMessages = dataResponsive.map((item) => ({
+              _id: item.id,
+              text: decrypt(item.content, key),
+              createdAt: new Date(item.createdAt),
+              user: {
+                _id: item.staffId,
+                name: "",
+                avatar: "", // You can add avatar information if available in IListMessage
+              },
+            }));
+            setMessages(mappedMessages);
+          }
+        });
+        break;
+      case "INTERNAL":
+        ChatService.GetListMessage({
+          chatid: chatId,
+        }).then((res) => {
+          if (res.code === 200) {
+            let dataResponsive: IListMessage[] = cloneDeep(res.data.content);
+            const mappedMessages = dataResponsive.map((item) => ({
+              _id: item.id,
+              text: decrypt(item.content, key),
+              createdAt: new Date(item.createdAt),
+              user: {
+                _id: item.staffId,
+                name: item.sender,
+                avatar: "", // You can add avatar information if available in IListMessage
+              },
+            }));
+            setMessages(mappedMessages);
+          }
+        });
+      default:
+        break;
+    }
   }, []);
 
-  const onSend = useCallback((messages: any) => {
-    // console.log(messages);
+  const onSend = useCallback(async (messages: any) => {
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
-    ChatService.SendMessage({
-      chatId: chatId,
-      content: messages[0].text,
-      type: "CHAT",
-      sender: chatName,
-      staffId: GlobalVariable.token,
-    }).then((res) => {
-      console.log(res);
-    });
+    switch (type_chat) {
+      case "FACEBOOK":
+        ChatSocialService.SendFB({
+          message: {
+            text: encrypt(messages[0].text, key),
+          },
+          messaging_type: "RESPONSE",
+          recipient: {
+            id: psid,
+          },
+          chatId: chatId,
+          staffId: GlobalVariable.token,
+        }).then((res) => {});
+        break;
+      case "INTERNAL":
+        ChatService.SendMessage({
+          chatId: chatId,
+          content: encrypt(messages[0].text, key),
+          type: "CHAT",
+          sender: chatName,
+          staffId: GlobalVariable.token,
+        }).then((res) => {});
+      default:
+        break;
+    }
   }, []);
 
   // change button of send
@@ -93,8 +136,7 @@ export const PersonalChat = ({}) => {
             backgroundColor: COLORS.primary,
             marginRight: 5,
             marginBottom: 5,
-          }}
-        >
+          }}>
           <FontAwesome name="send" size={12} color={COLORS.white} />
         </View>
       </Send>
@@ -124,8 +166,7 @@ export const PersonalChat = ({}) => {
       style={{
         flex: 1,
         // color: COLORS.secondaryWhite,
-      }}
-    >
+      }}>
       <StatusBar style="light" backgroundColor={COLORS.white} />
       <View
         style={{
@@ -134,19 +175,16 @@ export const PersonalChat = ({}) => {
           paddingHorizontal: 22,
           backgroundColor: COLORS.white,
           height: 60,
-        }}
-      >
+        }}>
         <View
           style={{
             flexDirection: "row",
             alignItems: "center",
-          }}
-        >
+          }}>
           <TouchableOpacity
             onPress={() => {
               router.back();
-            }}
-          >
+            }}>
             <MaterialIcons
               name="keyboard-arrow-left"
               size={24}
@@ -160,22 +198,19 @@ export const PersonalChat = ({}) => {
           style={{
             flexDirection: "row",
             alignItems: "center",
-          }}
-        >
+          }}>
           <TouchableOpacity
             onPress={() => console.log("search")}
             style={{
               marginRight: 8,
-            }}
-          >
+            }}>
             <MaterialIcons name="search" size={24} color={COLORS.black} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => console.log("Menu")}
             style={{
               marginRight: 8,
-            }}
-          >
+            }}>
             <MaterialIcons name="menu" size={24} color={COLORS.black} />
           </TouchableOpacity>
         </View>
